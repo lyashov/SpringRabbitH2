@@ -15,7 +15,7 @@ public class MessageRepositoryTest
     @Autowired
     MessageRepository repository;
 
-    final String TEST_MESSAGE = "test message";
+    final String TEST_MESSAGE = "test repository message";
 
     @Test
     public void testRepository() {
