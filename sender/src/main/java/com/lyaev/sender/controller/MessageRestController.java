@@ -16,10 +16,19 @@ public class MessageRestController {
     @Autowired
     SenderService senderService;
 
+    @Autowired
+    Message msg;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageRestController.class);
 
+    @RequestMapping("/")
+    public @ResponseBody ResponseEntity<Message> mainPage() {
+        msg.setMessage("This service has API at: http://hostname/api/message");
+        return new ResponseEntity<Message>(msg, HttpStatus.OK);
+    }
+
     @RequestMapping({"/api/message"})
-    public ResponseEntity<Message> postMessage(@RequestBody Message message) throws IOException, TimeoutException {
+    public @ResponseBody ResponseEntity<Message> postMessage(@RequestBody Message message) throws IOException, TimeoutException {
         LOGGER.info("Run controller /api/message");
         if (message != null) {
             senderService.sendMessage(message);

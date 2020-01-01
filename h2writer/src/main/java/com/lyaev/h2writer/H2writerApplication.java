@@ -23,9 +23,7 @@ public class H2writerApplication {
     @Autowired
     MessageService messageService;
 
-    @Bean
-    public void RecieverProcess() throws IOException, TimeoutException {
-        final String QUEUE_NAME = env.getProperty("rabbit.queue");
+    private Connection getRabbitConnection() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setUsername(env.getProperty("rabbit.user"));
         factory.setPassword(env.getProperty("rabbit.password"));
@@ -33,18 +31,21 @@ public class H2writerApplication {
         factory.setPort(Integer.parseInt(env.getProperty("rabbit.port")));
         factory.setVirtualHost(env.getProperty("rabbit.virtualHost"));
         Connection connection = factory.newConnection();
-        Channel channel = connection.createChannel();
+        return connection;
+    }
 
+    @Bean
+    public void RecieverProcess() throws IOException, TimeoutException {
+        final String QUEUE_NAME = env.getProperty("rabbit.queue");
+        Connection connection = getRabbitConnection();
+        Channel channel = connection.createChannel();
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
         LOGGER.info(" [*] Waiting for messages...");
         final String[] message = new String[1];
-        DeliverCallback deliverCallback = new DeliverCallback() {
-            @Override
-            public void handle(String consumerTag, Delivery delivery) throws IOException {
-                message[0] = new String(delivery.getBody(), "UTF-8");
-                messageService.saveMessage(message[0]);
-                LOGGER.info("Received ".concat(message[0]));
-            }
+        DeliverCallback deliverCallback = (consumerTag, delivery) -> {
+            message[0] = new String(delivery.getBody(), "UTF-8");
+            messageService.saveMessage(message[0]);
+            LOGGER.info("Received ".concat(message[0]));
         };
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, new CancelCallback() {
             @Override

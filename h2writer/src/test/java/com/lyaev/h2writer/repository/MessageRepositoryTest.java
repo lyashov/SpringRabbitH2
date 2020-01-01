@@ -26,6 +26,6 @@ public class MessageRepositoryTest {
 
         // then
 
-       // assertThat(found.getMessage()).isEqualTo(mes.getMessage());
+        assertThat(found.getMessage()).isEqualTo(mes.getMessage());
     }
 }
