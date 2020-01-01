@@ -2,6 +2,8 @@ package com.lyaev.sender.controller;
 
 import com.lyaev.sender.sevice.Message;
 import com.lyaev.sender.sevice.SenderService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +16,11 @@ public class MessageRestController {
     @Autowired
     SenderService senderService;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageRestController.class);
+
     @RequestMapping({"/api/message"})
     public ResponseEntity<Message> postMessage(@RequestBody Message message) throws IOException, TimeoutException {
+        LOGGER.info("Run controller /api/message");
         if (message != null) {
             senderService.sendMessage(message);
             return new ResponseEntity<Message>(message, HttpStatus.OK);

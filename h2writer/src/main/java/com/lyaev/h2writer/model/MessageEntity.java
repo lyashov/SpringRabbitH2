@@ -1,11 +1,17 @@
 package com.lyaev.h2writer.model;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name="MESSAGES")
 public class MessageEntity {
+    public MessageEntity(String message) {
+        this.message = message;
+    }
+
+    public MessageEntity() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false)

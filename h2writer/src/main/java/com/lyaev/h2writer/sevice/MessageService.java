@@ -11,8 +11,12 @@ public class MessageService {
     MessageRepository repository;
 
     public MessageEntity saveMessage(String message) {
-        MessageEntity messageEntity = new MessageEntity();
+        MessageEntity messageEntity = new MessageEntity("");
         messageEntity.setMessage(message);
         return repository.save(messageEntity);
+    }
+
+    public MessageEntity findByMessage(String message) {
+        return repository.findByMessage(message);
     }
 }
