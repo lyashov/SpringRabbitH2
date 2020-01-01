@@ -2,6 +2,8 @@ package com.lyaev.h2writer;
 
 import com.lyaev.h2writer.sevice.MessageService;
 import com.rabbitmq.client.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,13 +15,15 @@ import java.util.concurrent.TimeoutException;
 
 @SpringBootApplication
 public class H2writerApplication {
+    private static final Logger LOGGER = LoggerFactory.getLogger(H2writerApplication.class);
+
     @Autowired
     private Environment env;
 
     @Autowired
     MessageService messageService;
 
-  //  @Bean
+    @Bean
     public void RecieverProcess() throws IOException, TimeoutException {
         final String QUEUE_NAME = env.getProperty("rabbit.queue");
         ConnectionFactory factory = new ConnectionFactory();
@@ -32,14 +36,14 @@ public class H2writerApplication {
         Channel channel = connection.createChannel();
 
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-        System.out.println(" [*] Waiting for messages...");
+        LOGGER.info(" [*] Waiting for messages...");
         final String[] message = new String[1];
         DeliverCallback deliverCallback = new DeliverCallback() {
             @Override
             public void handle(String consumerTag, Delivery delivery) throws IOException {
                 message[0] = new String(delivery.getBody(), "UTF-8");
                 messageService.saveMessage(message[0]);
-                System.out.println("Received ".concat(message[0]));
+                LOGGER.info("Received ".concat(message[0]));
             }
         };
         channel.basicConsume(QUEUE_NAME, true, deliverCallback, new CancelCallback() {
