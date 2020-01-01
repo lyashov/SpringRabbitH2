@@ -16,6 +16,7 @@ public class MessageServiceTest {
     @Test
     public void saveMessage() {
         MessageEntity message = messageService.saveMessage(TEST_MESSAGE);
+
         org.junit.Assert.assertTrue(message.getMessage().equals(TEST_MESSAGE));
     }
 

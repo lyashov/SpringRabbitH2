@@ -1,5 +1,6 @@
 package com.lyaev.sender.controller;
 
+import com.lyaev.sender.sevice.Message;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
-class MessageRestControllerTest {
+class MessageRestControllerJUnitTest {
     @Autowired
     private MessageRestController controller;
+
+    @Autowired
+    Message msg;
 
     @LocalServerPort
     private int port;
@@ -28,8 +32,9 @@ class MessageRestControllerTest {
     }
 
     @Test
-    public void messageRestControllerTest() throws Exception {
+    public void greetengControllerTest() throws Exception {
+        String helloMessage = "{\"message\":\"This service has API at: http://hostname/api/message\"}";
         assertThat(this.restTemplate.getForObject("http://localhost:" + port + "/",
-                String.class)).contains("Hello World!!");
+                String.class)).contains(helloMessage);
     }
 }

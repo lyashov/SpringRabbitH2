@@ -13,16 +13,16 @@ import java.util.concurrent.TimeoutException;
 
 @RestController
 public class MessageRestController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageRestController.class);
+
     @Autowired
     SenderService senderService;
 
     @Autowired
     Message msg;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MessageRestController.class);
-
     @RequestMapping("/")
-    public @ResponseBody ResponseEntity<Message> mainPage() {
+    public @ResponseBody ResponseEntity<Message> greeting() {
         msg.setMessage("This service has API at: http://hostname/api/message");
         return new ResponseEntity<Message>(msg, HttpStatus.OK);
     }
