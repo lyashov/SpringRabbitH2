@@ -17,8 +17,9 @@ function doSend() {
     $.ajax({	
         url : "http://localhost:8080/api/message",
         contentType: "application/json",
+        crossDomain: true,
         type: 'POST',
-        async: false,
+        async: true,
         data: JSON.stringify({ message: msg}),
         success: function (data) {
 			alert('Сообщение ' + msg + " отправленно в очередь!");

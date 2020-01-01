@@ -21,12 +21,14 @@ public class MessageRestController {
     @Autowired
     Message msg;
 
+    @CrossOrigin
     @RequestMapping("/")
     public @ResponseBody ResponseEntity<Message> greeting() {
         msg.setMessage("This service has API at: http://hostname/api/message");
         return new ResponseEntity<Message>(msg, HttpStatus.OK);
     }
 
+    @CrossOrigin
     @RequestMapping({"/api/message"})
     public @ResponseBody ResponseEntity<Message> postMessage(@RequestBody Message message) throws IOException, TimeoutException {
         LOGGER.info("Run controller /api/message");
