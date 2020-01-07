@@ -2,6 +2,9 @@ package com.lyaev.h2writer.model;
 
 import javax.persistence.*;
 
+/**
+ * Message's entity
+ */
 @Entity
 @Table(name="MESSAGES")
 public class MessageEntity {

@@ -2,6 +2,9 @@ package com.lyaev.sender.sevice;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Message class.
+ */
 @Component
 public class Message {
     private String message;

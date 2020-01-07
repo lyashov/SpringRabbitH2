@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -23,6 +22,12 @@ public class H2writerApplication {
     @Autowired
     MessageService messageService;
 
+    /**
+     * @return rabbitmq connection.
+     * Сonnection parameters from the application.properties are used
+     * @throws IOException
+     * @throws TimeoutException
+     */
     private Connection getRabbitConnection() throws IOException, TimeoutException {
         ConnectionFactory factory = new ConnectionFactory();
         factory.setUsername(env.getProperty("rabbit.user"));
@@ -34,6 +39,11 @@ public class H2writerApplication {
         return connection;
     }
 
+    /**
+     * Waiting for messages process. Each received messages is saved to the database.
+     * @throws IOException
+     * @throws TimeoutException
+     */
     @Bean
     public void RecieverProcess() throws IOException, TimeoutException {
         final String QUEUE_NAME = env.getProperty("rabbit.queue");

@@ -21,6 +21,10 @@ public class MessageRestController {
     @Autowired
     Message msg;
 
+    /**
+     * @CrossOrigin spring's annotation used for cross domain requests.
+     * @return start page
+     */
     @CrossOrigin
     @RequestMapping("/")
     public @ResponseBody ResponseEntity<Message> greeting() {
@@ -28,6 +32,11 @@ public class MessageRestController {
         return new ResponseEntity<Message>(msg, HttpStatus.OK);
     }
 
+    /**
+     * @CrossOrigin spring's annotation used for cross domain requests.
+     * Get a message from request parameter and send the message through sender service.
+     * @return received message
+     */
     @CrossOrigin
     @RequestMapping({"/api/message"})
     public @ResponseBody ResponseEntity<Message> postMessage(@RequestBody Message message) throws IOException, TimeoutException {
